@@ -1,4 +1,6 @@
+import type { Attachment } from "mailparser";
 export type EmailDetails = {
+  attachments: Attachment[];
   subject?: string;
   date?: Date;
   from?: string;

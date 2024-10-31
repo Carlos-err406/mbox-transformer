@@ -44,6 +44,7 @@ export async function parseRawEmail(rawEmail: string): Promise<EmailDetails> {
   const parsedEmail = await simpleParser(rawEmail);
   // Get necessary headers
   const {
+    attachments,
     messageId,
     inReplyTo,
     references,
@@ -74,6 +75,7 @@ export async function parseRawEmail(rawEmail: string): Promise<EmailDetails> {
 
   // Build email details
   const email = {
+    attachments,
     subject,
     date,
     inReplyTo,
