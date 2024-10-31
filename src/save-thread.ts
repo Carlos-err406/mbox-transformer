@@ -1,10 +1,14 @@
 import fs from "fs";
 import { EmailDetails } from "./email-details.js";
+import OpenAI from "openai";
+import { AI } from "./ai.js";
+import { summarizeThread } from "./summarize-thread.js";
 
-export const saveThread = (
+export const saveThread = async (
   thread: EmailDetails[],
   index: number,
-  outputFolder: string
+  outputFolder: string,
+  ai: AI
 ) => {
   const folder = `${outputFolder}/${index.toString().padStart(5, "0")}`;
   fs.mkdirSync(folder, { recursive: true });
@@ -28,4 +32,11 @@ export const saveThread = (
       });
     }
   });
+  if (ai.summarize) {
+    const summary = await summarizeThread(ai, thread);
+    if (summary) {
+      fs.writeFileSync(`${folder}/summary.txt`, summary);
+      console.log(`SUMMARY: ${folder}/summary.txt`);
+    }
+  }
 };
