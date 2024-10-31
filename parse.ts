@@ -4,7 +4,7 @@ import { Command } from "commander";
 import fs from "fs";
 import { parseMboxFile } from "./src/parsers.js";
 import { sortThread, sortThreadsByFirstMessage } from "./src/utils.js";
-import PQueue from "p-queue";
+import { saveThread } from "./src/save-thread.js";
 const program = new Command();
 
 program
@@ -12,7 +12,7 @@ program
   .option("-o, --output <path>", "output folder path")
   .option(
     "-m, --min-messages <number>",
-    "minimum number of messages per thread"
+    "minimum number of messages per thread, defaults to 0"
   )
   .parse(process.argv);
 
@@ -43,17 +43,7 @@ async function main() {
       threadArray.map(sortThread)
     ).filter((thread) => thread.length >= minMessages);
 
-    const queue = new PQueue({ concurrency: 5 }); // adjust concurrency as needed
-    sorted.map((thread, index) => {
-      const filename = `${outputFolder}/${index
-        .toString()
-        .padStart(10, "0")}.json`;
-      console.log(filename);
-      queue.add(() =>
-        fs.writeFileSync(filename, JSON.stringify(thread, null, 2))
-      );
-    });
-    await queue.onIdle();
+    sorted.map((thread, index) => saveThread(thread, index, outputFolder));
     console.log(sorted.length);
   } catch (err) {
     console.log(err);

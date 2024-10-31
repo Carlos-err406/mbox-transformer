@@ -5,6 +5,7 @@ import { MboxStream } from "node-mbox";
 import { EmailDetails } from "./email-details.js";
 import { findThreadRoot, removeQuotedText } from "./utils.js";
 
+const skipMailsFrom = ["Mail Delivery Subsystem", "Mail Delivery System"];
 export async function parseMboxFile(
   inputFile: string
 ): Promise<Map<string, EmailDetails[]>> {
@@ -17,7 +18,8 @@ export async function parseMboxFile(
 
     mbox.on("data", async (rawEmail: string) => {
       const email = await parseRawEmail(rawEmail);
-      const { inReplyTo, messageId, references } = email;
+      const { inReplyTo, messageId, references, from } = email;
+      if (skipMailsFrom.some((mds) => from?.includes(mds))) return; // Skip messages from MDS
       if (!messageId) throw new Error("Message-ID is missing");
       // Store each message by its Message-ID
       messageMap.set(messageId, email);
