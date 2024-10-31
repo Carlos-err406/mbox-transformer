@@ -1,0 +1,11 @@
+<thread-1>
+ <message>
+    <sender>
+        <name>{}</name>
+        <email>{}</name>
+    </sender>
+    <date>{}</date>
+    <content>{}</content>
+ </message>
+ <message> ... </message>
+</thread-1>
