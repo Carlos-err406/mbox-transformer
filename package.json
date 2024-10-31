@@ -1,6 +1,6 @@
 {
   "name": "mbox-transformer",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "extract data from mbox file and re write it in a different format",
   "main": "dist/parse.js",
   "bin": {
