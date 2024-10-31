@@ -10,11 +10,16 @@ const program = new Command();
 program
   .option("-i, --input <path>", "input file path")
   .option("-o, --output <path>", "output folder path")
+  .option(
+    "-m, --min-messages <number>",
+    "minimum number of messages per thread"
+  )
   .parse(process.argv);
 
 const options = program.opts();
 const inputFile = options.input;
 const outputFolder = options.output;
+const minMessages = Number(options.minMessages) ?? 0;
 
 if (!inputFile || !outputFolder) {
   console.error("Both input and output paths are required.");
@@ -34,7 +39,10 @@ async function main() {
     const threads = await parseMboxFile(inputFile);
     const threadArray = Array.from(threads.values());
 
-    const sorted = sortThreadsByFirstMessage(threadArray.map(sortThread));
+    const sorted = sortThreadsByFirstMessage(
+      threadArray.map(sortThread)
+    ).filter((thread) => thread.length >= minMessages);
+
     const queue = new PQueue({ concurrency: 5 }); // adjust concurrency as needed
     sorted.map((thread, index) => {
       const filename = `${outputFolder}/${index
