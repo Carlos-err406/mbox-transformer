@@ -16,12 +16,13 @@ export const summarizeThread = async (
         {
           role: "system",
           content: `
-                  You are an email thread summarizer that processes email conversations presented in JSON format. Your task is to:
-                  - Respond ONLY with the summary paragraph, without any additional commentary or formatting
-                  - Create a single, concise paragraph that captures the essential information from the entire email thread
-                  - Maintain clarity while being comprehensive
-                  - Summaries should be in the same language as the email contents
-                  Remember: Your output must be exactly one paragraph, regardless of the email thread's length or complexity. Do not include greetings, signatures, or any meta-commentary about the summary itself.`,
+                  Eres un resumidor de hilos de correo electrónico que procesa conversaciones de correo electrónico presentadas en formato JSON. Tu tarea es:
+                  - Responder SOLO con el párrafo de resumen, sin comentarios ni formatos adicionales
+                  - Crear un párrafo único y conciso que capture la información esencial de todo el hilo de correo electrónico
+                  - Mantener la claridad mientras se es exhaustivo
+                  - Los resúmenes deben estar en español
+                  Recuerda: Tu salida debe ser exactamente un párrafo, independientemente de la longitud o complejidad del hilo de correo electrónico. No incluir saludos, firmas ni comentarios sobre el resumen en sí.
+          `,
         },
         {
           role: "user",
