@@ -71,7 +71,10 @@ export async function parseRawEmail(rawEmail: string): Promise<EmailDetails> {
     if (Array.isArray(to)) normalizedTo = to.map((to) => to.text).join(", ");
     else normalizedTo = to.text;
   }
+  
+  const base64Regex = /data:[^;]+;base64,[A-Za-z0-9+/=]{4,}/g;
 
+  // Replace all matches with empty string
   const plainTextContent =
     text || (html ? convert(html, { wordwrap: false }) : "");
 
@@ -84,7 +87,7 @@ export async function parseRawEmail(rawEmail: string): Promise<EmailDetails> {
     messageId,
     from: from?.text,
     to: normalizedTo,
-    text: removeQuotedText(plainTextContent),
+    text: removeQuotedText(plainTextContent.replace(base64Regex, "")),
     references: referenceList,
   };
   return email;

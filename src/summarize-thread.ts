@@ -5,11 +5,8 @@ import { EmailDetails } from "./email-details.js";
 export const summarizeThread = async (
   ai: AI,
   thread: EmailDetails[],
-  attempt = 0
-): Promise<string> => {
-  if (attempt > 3) {
-    throw new Error("Failed to summarize thread");
-  }
+  folder: string
+) => {
   const { apiKey, apiUrl, model } = ai;
   const openai = new OpenAI({ baseURL: apiUrl, apiKey });
   try {
@@ -40,8 +37,8 @@ export const summarizeThread = async (
     });
     return response.choices[0].message.content || "";
   } catch (e) {
-    console.log(e);
-    await new Promise((r) => setTimeout(r, 1000)); //avoid rate-limits
-    return await summarizeThread(ai, thread, attempt++);
+    console.log(`SUMMARY ERRORE: error creating summary for thread ${folder}`, {
+      e,
+    });
   }
 };

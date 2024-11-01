@@ -18,7 +18,7 @@ export const saveThread = async (thread, index, outputFolder, ai) => {
         }
     });
     if (ai.summarize) {
-        const summary = await summarizeThread(ai, thread);
+        const summary = await summarizeThread(ai, thread, folder);
         if (summary) {
             fs.writeFileSync(`${folder}/summary.txt`, summary);
             console.log(`SUMMARY: ${folder}/summary.txt`);

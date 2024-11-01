@@ -1,8 +1,5 @@
 import OpenAI from "openai";
-export const summarizeThread = async (ai, thread, attempt = 0) => {
-    if (attempt > 3) {
-        throw new Error("Failed to summarize thread");
-    }
+export const summarizeThread = async (ai, thread, folder) => {
     const { apiKey, apiUrl, model } = ai;
     const openai = new OpenAI({ baseURL: apiUrl, apiKey });
     try {
@@ -32,8 +29,8 @@ export const summarizeThread = async (ai, thread, attempt = 0) => {
         return response.choices[0].message.content || "";
     }
     catch (e) {
-        console.log(e);
-        await new Promise((r) => setTimeout(r, 1000)); //avoid rate-limits
-        return await summarizeThread(ai, thread, attempt++);
+        console.log(`SUMMARY ERRORE: error creating summary for thread ${folder}`, {
+            e,
+        });
     }
 };
